@@ -27,10 +27,13 @@ def get_board_str(board):
 
 
 def set_on_board(fun, char, board):
+    on_board = set()
     for i in board:
         for j in board[i]:
             if fun(i, j):
                 board[i][j] = char
+                on_board.add((i, j))
+    return on_board
 
 
 def ellipse_disk(x, y, x0, y0, A, B, r):
@@ -38,7 +41,7 @@ def ellipse_disk(x, y, x0, y0, A, B, r):
 
 
 def ellipse(x, y, x0, y0, A, B, r):
-    return math.fabs((x - x0) ** 2 / A + (y - y0) ** 2 / B - r ** 2) < 1
+    return math.fabs((x - x0) ** 2 / A + (y - y0) ** 2 / B - r ** 2) < 3
 
 
 def plat(x, y):
@@ -70,8 +73,20 @@ def middle_coating(x, y):
     return _coating(x, y, CAKE_R - 1)
 
 
+def down_len():
+    n = 0
+    while n < 6:
+        if random.randint(0, 1):
+            break
+        n += 1
+    return n
+
+
 def set_coating(board):
-    set_on_board(coating, "@", board)
+    coating_fields = set_on_board(coating, "@", board)
+    for x, y in coating_fields:
+        for i in range(down_len()):
+            board[x + i][y] = "@"
 
 
 def middle(x, y):
@@ -105,36 +120,51 @@ def set_candle(board, x, y):
     board[x - 7][y + 1] = ")"
     board[x - 7][y] = "o"
     board[x - 8][y] = "("
-    board[x - 10][y] = ")"
+    board[x - 9][y] = ")"
+
+
+class CakeTooSmall(Exception):
+    pass
 
 
 def set_candles(years, board):
     candles = set()
-    candidates = set()
 
-    for i in board:
-        for j in board[i]:
-            if middle_coating(i, j):
-                candidates.add((i, j))
+    num_tries = 100
 
-    while len(candidates) > 0 and len(candles) < years:
+    while len(candles) < years and num_tries:
+        num_tries -= 1
 
-        x, y = random.choice(list(candidates))
-        candidates.remove((x, y))
+        candles = set()
+        candidates = set()
 
-        fits = True
-        for candle_x, candle_y in candles:
-            if math.fabs(candle_y - y) < 4 and math.fabs(candle_x - x) < 12:
-                fits = False
-                break
+        for i in board:
+            for j in board[i]:
+                if middle_coating(i, j):
+                    candidates.add((i, j))
 
-        if not fits:
-            continue
+        while len(candidates) > 0 and len(candles) < years:
 
-        candles.add((x, y))
-        set_candle(board, x, y)
+            x, y = random.choice(list(candidates))
+            candidates.remove((x, y))
 
-    return candles
+            fits = True
+            for candle_x, candle_y in candles:
+                if math.fabs(candle_y - y) < 4 and math.fabs(candle_x - x) < 12:
+                    fits = False
+                    break
+
+            if not fits:
+                continue
+
+            candles.add((x, y))
+
+    if len(candles) == years:
+        for x, y in candles:
+            set_candle(board, x, y)
+        return candles
+    else:
+        raise CakeTooSmall(f"not enough place to set {years} candles!")
 
 
 def move_candles(candles, board):
@@ -144,7 +174,7 @@ def move_candles(candles, board):
     while n > 0:
         x, y = random.choice(list(to_move))
         to_move.remove((x, y))
-        board[x - 8][y], board[x - 10][y] = board[x - 10][y], board[x - 8][y]
+        board[x - 8][y], board[x - 9][y] = board[x - 9][y], board[x - 8][y]
         n -= 1
 
 
