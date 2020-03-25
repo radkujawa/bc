@@ -6,9 +6,9 @@ from asciimatics.screen import Screen
 
 YEARS = 29
 BOARD_HEIGHT = 60
-BOARD_WIDTH = 180
+BOARD_WIDTH = 128
 CAKE_HEIGHT = 10
-PLATE_R = 15
+PLATE_R = 14
 CAKE_R = int(PLATE_R * 8 / 10)
 
 
