@@ -130,7 +130,7 @@ class CakeTooSmall(Exception):
 def set_candles(years, board):
     candles = set()
 
-    num_tries = 100
+    num_tries = 1000
 
     while len(candles) < years and num_tries:
         num_tries -= 1
