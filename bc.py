@@ -21,7 +21,6 @@ def get_board_str(board):
         for j in board[i]:
             s += board[i][j]
         ret.append(s)
-        s = ""
 
     return ret
 
