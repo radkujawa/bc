@@ -1,3 +1,3 @@
-# bc
+# bc - birthday cake
 
-just type `pip install asciimatics; python bc.py`
+to see the birthday cake, just type `pip install -r requirements.txt; python bc.py`
