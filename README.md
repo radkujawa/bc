@@ -2,4 +2,7 @@
 
 to see the birthday cake, just type `pip install -r requirements.txt; python bc.py`
 
-To put candles down, Type 'ffffff' :-) 
+To put candles down, Type `ffffff` :-) 
+
+
+Patches are welcome, released under WTFPL. 
