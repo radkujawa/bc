@@ -113,17 +113,19 @@ def set_candle(board, x, y, fire, without_candles):
         board[x - i][y + 1] = right
 
     board[x - 5][y] = "~"
-    board[x - 6][y - 1] = "'"
-    board[x - 6][y + 1] = "'"
     board[x - 6][y] = "|"
 
     if fire:
+        board[x - 6][y - 1] = "'"
+        board[x - 6][y + 1] = "'"
         board[x - 7][y - 1] = "("
         board[x - 7][y + 1] = ")"
         board[x - 7][y] = "o"
         board[x - 8][y] = "("
         board[x - 9][y] = ")"
     else:
+        board[x - 6][y - 1] = without_candles[x - 6][y - 1]
+        board[x - 6][y + 1] = without_candles[x - 6][y + 1]
         board[x - 7][y - 1] = without_candles[x - 7][y - 1]
         board[x - 7][y + 1] = without_candles[x - 7][y + 1]
         board[x - 7][y] = without_candles[x - 7][y]
